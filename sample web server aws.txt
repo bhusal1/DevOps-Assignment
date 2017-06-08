@@ -1,32 +1,18 @@
-Creating and Deploying the ec2 instance
+Creating and Deploying the ec2 instance using Puppet module
 
-Here i am using a configuration management tool as a puppet and deploying an ec2 instance as a 
 First step
 a)write a module for ec2 instance configuring security group
 
 ec2_instance { 'my-web-server':
   ensure                => 'running',
   region                => 'us-east-1',
-  availability_zone     => 'us-east-1b',
+  availability_zone     => 'us-east-1d',
   image_id              => 'ami-696e652c',
-  instance_type         => 't1.micro',
+  instance_type         => 't2.micro',
   security_groups       => ['my-web-group'],
 }
 
-We can do the same process from the Aws console also. Here are the following steps that I followed
-•	Go to Ec2 instance services
-•	Launch Instance
-•	Choose the AMI image you want as i choose RHEL 7.1
-•	Select the type of the instance you want _t1.micro/t2.micro
-•	configure the instance details network,subnet.public ip/private ip (none or we can specify based on our regions)
-•	specify the storage options and add storage (default)
-•	configure the security group(i.e. my-web-group) 
-•	Then reviewing the instance and launch the instance with the downloaded key pair or without if you have an existing  key pair.
-•	Check the instance status in console and Make sure it was running
-•	then,By connecting to that instance make sure that it was up to date
-•	Connect to the EC2 user.
-	$ chmod 400 mykeypair.pem
-	$ ssh ec2-user@ip-addr -i mykeypair.pem
+
 
 •	install the apache webserver
 	 [ec2-user ~]$ sudo yum update -y
@@ -46,7 +32,7 @@ We can do the same process from the Aws console also. Here are the following ste
 </html>
 wq!---Save and exit
 
-If you want to deploy it through puppet here is the module written 
+configuring using Puppet module 
 Module need to be written in site.pp 
 
 node 'my-web-server'
@@ -64,11 +50,8 @@ exec { 'yum-update':
   }
 }
 
-If you want it to run in specific ports you should mention 
 
-“Expose   => port numbers you want to”
 
-When you go to the ec2 instance in CLI and run
-# puppet apply command
+# Run puppet apply command in CLI EC2 instance.
 
 
